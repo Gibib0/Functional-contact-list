@@ -1,0 +1,14 @@
+* {
+	box-sizing: border-box;
+}
+
+.contact-list {
+	width: 50%;
+  padding: 10px;
+}
+
+.contact-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
