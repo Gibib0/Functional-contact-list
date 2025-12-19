@@ -1,27 +1,25 @@
-import { Component } from "react";
 import './ContactItem.css'
 
-class ContactItem extends Component {
-	handleSelect = () => {
-		this.props.onSelect(this.props.contact)
-	}
+const ContactItem = ({ contact, onSelect, onDelete }) => {
+  const { firstName, lastName } = contact
 
-	handleDeleteClick = (e) => {
-		e.stopPropagation()
-		this.props.onDelete(this.props.contact.id)
-	}
+  const handleSelect = () => {
+    onSelect(contact)
+  }
 
-	render() {
-		const {contact} = this.props
-		const {firstName, lastName} = contact
+  const handleDeleteClick = (e) => {
+    e.stopPropagation()
+    onDelete(contact.id)
+  }
 
-		return (
-			<div className="contact-item" onDoubleClick={this.handleSelect}>
-				<span className="contact-name">{firstName} {lastName}</span>
-				<button className="contact-delete-btn" onClick={this.handleDeleteClick}>x</button>
-			</div>
-		)
-	}
+  return (
+    <div className="contact-item" onDoubleClick={handleSelect}>
+      <span className="contact-name">{firstName} {lastName}</span>
+      <button className="contact-delete-btn" onClick={handleDeleteClick}>
+        x
+      </button>
+    </div>
+  )
 }
 
 export default ContactItem

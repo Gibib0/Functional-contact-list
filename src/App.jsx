@@ -1,11 +1,11 @@
-import { Component } from 'react'
+import { useState, useEffect } from 'react'
 import { nanoid } from 'nanoid'
 import ContactList from './components/ContactList/ContactList'
 import ContactForm from './components/ContactForm/ContactForm'
 import './App.css'
 
-class App extends Component {
-  createEmptyContact = () => ({
+const App = () => {
+  const createEmptyContact = () => ({
     id: null,
     firstName: '',
     lastName: '',
@@ -13,106 +13,84 @@ class App extends Component {
     phone: ''
   })
 
-  state = {
-    contacts: [],
-    currentContact: this.createEmptyContact(),
-    isEditing: false
-  }
+  const [contacts, setContacts] = useState([])
+  const [currentContact, setCurrentContact] = useState(createEmptyContact())
+  const [isEditing, setIsEditing] = useState(false)
 
-  componentDidMount() {
+  useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('contacts'))
-    if (saved) this.setState({contacts: saved})
-  }
+    if (saved) {
+      setContacts(saved);
+    }
+  }, [])
 
-  saveToLocalStorage = (contacts) => {
+  useEffect(() => {
     localStorage.setItem('contacts', JSON.stringify(contacts))
+  }, [contacts])
+
+  const handleSelectContact = (contact) => {
+    setCurrentContact(contact)
+    setIsEditing(true)
   }
 
-  handleSelectContact = (contact) => {
-    this.setState({
-      currentContact: contact,
-      isEditing: true
-    })
+  const handleNewContact = () => {
+    setCurrentContact(createEmptyContact())
+    setIsEditing(false)
   }
 
-  handleNewContact = () => {
-    this.setState({
-      currentContact: this.createEmptyContact(),
-      isEditing: false
-    })
-  }
-
-  handleSaveContact = (contact) => {
-    const {contacts, isEditing} = this.state
-    let updatedContacts
-
+  const handleSaveContact = (contact) => {
     if (isEditing) {
-      updatedContacts = contacts.map(c => (c.id === contact.id ? contact : c))
-      this.setState({
-        contacts: updatedContacts,
-        currentContact: contact,
-        isEditing: true
-      })
+      const updatedContacts = contacts.map(c => 
+        c.id === contact.id ? contact : c
+      )
+      setContacts(updatedContacts)
+      setCurrentContact(contact)
     } else {
       const newContact = {
         ...contact,
         id: nanoid()
       }
-      updatedContacts = [...contacts, newContact]
-      this.setState({
-        contacts: updatedContacts,
-        currentContact: this.createEmptyContact(),
-        isEditing: false
-      })
+      const updatedContacts = [...contacts, newContact]
+      setContacts(updatedContacts)
+      setCurrentContact(createEmptyContact())
+      setIsEditing(false)
     }
-
-    this.saveToLocalStorage(updatedContacts)
   }
 
-  handleDeleteContact = (id) => {
-    const {contacts} = this.state
+  const handleDeleteContact = (id) => {
     const updatedContacts = contacts.filter(contact => contact.id !== id)
-
-    this.setState({
-      contacts: updatedContacts,
-      currentContact: this.createEmptyContact(),
-      isEditing: false
-    })
-
-    this.saveToLocalStorage(updatedContacts)
+    setContacts(updatedContacts)
+    setCurrentContact(createEmptyContact())
+    setIsEditing(false)
   }
 
-  render() {
-    const {contacts, currentContact, isEditing} = this.state
+  return (
+    <div className='app-container'>
+      <header className='header'>
+        <h1>Contact list</h1>
+      </header>
 
-    return (
-      <div className='app-container'>
-        <header className='header'>
-          <h1>Contact list</h1>
-        </header>
+      <main className='main'>
+        <div className='main-container'>
+          <ContactList 
+            contacts={contacts}
+            onSelect={handleSelectContact}
+            onDelete={handleDeleteContact}
+          />
 
-        <main className='main'>
-          <div className='main-container'>
-            <ContactList 
-              contacts={contacts}
-              onSelect={this.handleSelectContact}
-              onDelete={this.handleDeleteContact}
+          <div className='form'>
+            <ContactForm
+              contact={currentContact}
+              isEditing={isEditing}
+              onSave={handleSaveContact}
+              onNew={handleNewContact}
+              onDelete={handleDeleteContact}
             />
-
-            <div className='form'>
-              <ContactForm
-                contact={currentContact}
-                isEditing={isEditing}
-                onSave={this.handleSaveContact}
-                onNew={this.handleNewContact}
-                onDelete={this.handleDeleteContact}
-              />
-            </div>
           </div>
-        </main>
-      </div>
-    )
-  }
+        </div>
+      </main>
+    </div>
+  )
 }
 
 export default App
