@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import './ContactForm.css'
 
 const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
-	const [form, setForm] = useState({ ...contact })
+	const [form, setForm] = useState(contact)
 
 	useEffect(() => {
-    setForm({ ...contact })
+    setForm(contact)
   }, [contact])
 
 	const onInputChange = (e) => {
@@ -54,7 +54,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
               className="clear-field-btn"
               onClick={() => handleClearField('firstName')}
             >
-              ×
+              x
             </button>
           )}
         </div>
@@ -76,7 +76,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
               className="clear-field-btn"
               onClick={() => handleClearField('lastName')}
             >
-              ×
+              x
             </button>
           )}
         </div>
@@ -98,7 +98,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
               className="clear-field-btn"
               onClick={() => handleClearField('email')}
             >
-              ×
+              x
             </button>
           )}
         </div>
@@ -120,7 +120,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
               className="clear-field-btn"
               onClick={() => handleClearField('phone')}
             >
-              ×
+              x
             </button>
           )}
         </div>
