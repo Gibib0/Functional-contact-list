@@ -13,20 +13,27 @@ const App = () => {
     phone: ''
   })
 
-  const [contacts, setContacts] = useState(() => {
-    const saved = JSON.parse(localStorage.getItem('contacts'))
-    return saved || []
-  })
+  const [contacts, setContacts] = useState([])
   const [currentContact, setCurrentContact] = useState(createEmptyContact())
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('contacts'))
+    if (saved) {
+      setContacts(saved);
+    } else {
+      setContacts([])
+    }
+  }, [])
+
+  const saveContactsToLocalStorage = (contacts) => {
     localStorage.setItem('contacts', JSON.stringify(contacts))
-  }, [contacts])
+  }
 
   const handleSelectContact = (contact) => {
     setCurrentContact(contact)
     setIsEditing(true)
+
   }
 
   const handleNewContact = () => {
@@ -34,22 +41,24 @@ const App = () => {
     setIsEditing(false)
   }
 
-  const handleSaveContact = (item) => {
+  const handleSaveContact = (contact) => {
     if (isEditing) {
-      const updatedContacts = contacts.map(c => 
-        c.id === item.id ? item : c
+      const updatedContacts = contacts.map(item => 
+        item.id === contact.id ? contact : item
       )
       setContacts(updatedContacts)
-      setCurrentContact(item)
+      setCurrentContact(contact)
+      saveContactsToLocalStorage(updatedContacts)
     } else {
       const newContact = {
-        ...item,
+        ...contact,
         id: nanoid()
       }
       const updatedContacts = [...contacts, newContact]
       setContacts(updatedContacts)
       setCurrentContact(createEmptyContact())
       setIsEditing(false)
+      saveContactsToLocalStorage(updatedContacts)
     }
   }
 
@@ -58,6 +67,7 @@ const App = () => {
     setContacts(updatedContacts)
     setCurrentContact(createEmptyContact())
     setIsEditing(false)
+    saveContactsToLocalStorage(updatedContacts)
   }
 
   return (
