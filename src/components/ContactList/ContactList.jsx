@@ -5,9 +5,9 @@ const ContactList = ({ contacts = [], onSelect, onDelete }) => {
 	return (
     <div className='contact-list'>
       <div className='contact-list-content'>
-        {contacts.map(contact => (
+        {contacts.map((contact, index) => (
           <ContactItem
-            key={contact.id}
+            key={contact.id || `fallback-${index}`}
             contact={contact}
             onSelect={onSelect}
             onDelete={onDelete}

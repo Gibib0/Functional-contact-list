@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { nanoid } from 'nanoid'
+// import { nanoid } from 'nanoid'
 import ContactList from './components/ContactList/ContactList'
 import ContactForm from './components/ContactForm/ContactForm'
 import './App.css'
+import {getAllContacts, createContact, updateContact, deleteContact} from './api/contact-service'
 
 const App = () => {
   const createEmptyContact = () => ({
@@ -18,22 +19,18 @@ const App = () => {
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem('contacts'))
-    if (saved) {
-      setContacts(saved);
-    } else {
-      setContacts([])
-    }
+    getAllContacts().then(({data}) => {
+      if (!data) {
+        setContacts([])
+      } else {
+        setContacts(data)
+      }
+    })
   }, [])
-
-  const saveContactsToLocalStorage = (contacts) => {
-    localStorage.setItem('contacts', JSON.stringify(contacts))
-  }
 
   const handleSelectContact = (contact) => {
     setCurrentContact(contact)
     setIsEditing(true)
-
   }
 
   const handleNewContact = () => {
@@ -41,33 +38,30 @@ const App = () => {
     setIsEditing(false)
   }
 
-  const handleSaveContact = (contact) => {
-    if (isEditing) {
-      const updatedContacts = contacts.map(item => 
-        item.id === contact.id ? contact : item
-      )
-      setContacts(updatedContacts)
-      setCurrentContact(contact)
-      saveContactsToLocalStorage(updatedContacts)
+  const handleSaveContact = async (contact) => {
+    if (isEditing && contact.id) {
+      const {data} = await updateContact(contact.id, contact)
+      setContacts((prev) => prev.map((item) => (item.id === contact.id ? data : item)))
+      setCurrentContact(data)
     } else {
-      const newContact = {
-        ...contact,
-        id: nanoid()
+      const contactToSave = {
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+        phone: contact.phone,
       }
-      const updatedContacts = [...contacts, newContact]
-      setContacts(updatedContacts)
+      const {data} = await createContact(contactToSave)
+      setContacts((prev) => [...prev, data])
       setCurrentContact(createEmptyContact())
       setIsEditing(false)
-      saveContactsToLocalStorage(updatedContacts)
     }
   }
 
-  const handleDeleteContact = (id) => {
-    const updatedContacts = contacts.filter(contact => contact.id !== id)
-    setContacts(updatedContacts)
+  const handleDeleteContact = async (id) => {
+    await deleteContact(id)
+    setContacts((prev) => prev.filter((contact) => contact.id !== id))
     setCurrentContact(createEmptyContact())
     setIsEditing(false)
-    saveContactsToLocalStorage(updatedContacts)
   }
 
   return (

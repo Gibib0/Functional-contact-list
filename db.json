@@ -1,0 +1,11 @@
+{
+  "contacts": [
+    {
+      "id": "ede1",
+      "firstName": "Anastasia ",
+      "lastName": "Antonova",
+      "email": "anast111antonova@gmail.com",
+      "phone": "123"
+    }
+  ]
+}

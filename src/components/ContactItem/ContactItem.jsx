@@ -1,7 +1,7 @@
 import './ContactItem.css'
 
 const ContactItem = ({ contact, onSelect, onDelete }) => {
-  const { firstName, lastName } = contact
+  const { firstName, lastName, id } = contact
 
   const handleSelect = () => {
     onSelect(contact)
@@ -9,7 +9,7 @@ const ContactItem = ({ contact, onSelect, onDelete }) => {
 
   const handleDeleteClick = (e) => {
     e.stopPropagation()
-    onDelete(contact.id)
+    onDelete(id)
   }
 
   return (
