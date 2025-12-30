@@ -19,13 +19,17 @@ const App = () => {
   const [isEditing, setIsEditing] = useState(false)
 
   useEffect(() => {
-    getAllContacts().then(({data}) => {
-      if (!data) {
+    const fetchContacts = async () => {
+      try {
+        const {data} = await getAllContacts()
+        setContacts(data || [])
+      } catch (error) {
+        console.error('Failed to fetch contacts', error)
         setContacts([])
-      } else {
-        setContacts(data)
       }
-    })
+    }
+
+    fetchContacts()
   }, [])
 
   const handleSelectContact = (contact) => {
@@ -44,13 +48,12 @@ const App = () => {
       setContacts((prev) => prev.map((item) => (item.id === contact.id ? data : item)))
       setCurrentContact(data)
     } else {
-      const contactToSave = {
+      const {data} = await createContact({
         firstName: contact.firstName,
         lastName: contact.lastName,
         email: contact.email,
         phone: contact.phone,
-      }
-      const {data} = await createContact(contactToSave)
+      })
       setContacts((prev) => [...prev, data])
       setCurrentContact(createEmptyContact())
       setIsEditing(false)

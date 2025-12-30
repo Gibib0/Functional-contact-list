@@ -18,10 +18,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
 
 	const onFormSubmit = (e) => {
     e.preventDefault()
-    const contactToSave = form.id === null 
-      ? { firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone }
-      : form
-    onSave(contactToSave)
+    onSave(form.id === null ? { firstName: form.firstName, lastName: form.lastName, email: form.email, phone: form.phone } : form)
   }
 
 	const handleClearField = (field) => {
@@ -142,7 +139,7 @@ const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
           Save
         </button>
 
-        {isEditing && form.id !== null && (
+        {isEditing && form.id && (
           <button 
             type="button" 
             className="btn btn-delete" 
