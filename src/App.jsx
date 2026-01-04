@@ -25,7 +25,7 @@ const App = () => {
         setContacts(data || [])
       } catch (error) {
         console.error('Failed to fetch contacts', error)
-        setContacts([])
+        // setContacts([])
       }
     }
 
@@ -48,12 +48,7 @@ const App = () => {
       setContacts((prev) => prev.map((item) => (item.id === contact.id ? data : item)))
       setCurrentContact(data)
     } else {
-      const {data} = await createContact({
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phone: contact.phone,
-      })
+      const {data} = await createContact(contact)
       setContacts((prev) => [...prev, data])
       setCurrentContact(createEmptyContact())
       setIsEditing(false)
