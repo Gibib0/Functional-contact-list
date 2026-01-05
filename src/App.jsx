@@ -7,7 +7,6 @@ import {getAllContacts, createContact, updateContact, deleteContact} from './api
 
 const App = () => {
   const createEmptyContact = () => ({
-    id: null,
     firstName: '',
     lastName: '',
     email: '',

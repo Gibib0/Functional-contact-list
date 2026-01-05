@@ -1,18 +1,11 @@
 {
   "contacts": [
     {
-      "id": "ede1",
-      "firstName": "Anastasiaa",
-      "lastName": "Antonova",
+      "id": "072f",
+      "firstName": "test",
+      "lastName": "contact",
       "email": "anast111antonova@gmail.com",
-      "phone": "123"
-    },
-    {
-      "id": null,
-      "firstName": "Ichigo",
-      "lastName": "Kurosaki",
-      "email": "asfafa@gmail.com",
-      "phone": "456"
+      "phone": "+38 (095) 901-96-93"
     }
   ]
 }
