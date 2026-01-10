@@ -18,8 +18,4 @@ const ContactList = ({ contacts = [], onSelect, onDelete }) => {
   )
 }
 
-ContactList.defaultProps = {
-  contacts: []
-}
-
 export default ContactList

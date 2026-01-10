@@ -1,65 +1,25 @@
-import { useState, useEffect } from 'react'
-// import { nanoid } from 'nanoid'
+import { useEffect } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
 import ContactList from './components/ContactList/ContactList'
 import ContactForm from './components/ContactForm/ContactForm'
+import {
+  fetchContacts,
+  selectContact,
+  newContact,
+  saveContact,
+  removeContact
+} from './store/actions/contactActions'
 import './App.css'
-import {getAllContacts, createContact, updateContact, deleteContact} from './api/contact-service'
 
 const App = () => {
-  const createEmptyContact = () => ({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: ''
-  })
-
-  const [contacts, setContacts] = useState([])
-  const [currentContact, setCurrentContact] = useState(createEmptyContact())
-  const [isEditing, setIsEditing] = useState(false)
+  const dispatch = useDispatch()
+  const contacts = useSelector(state => state.list)
+  const currentContact = useSelector(state => state.currentContact)
+  const isEditing = useSelector(state => state.isEditing)
 
   useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const {data} = await getAllContacts()
-        setContacts(data || [])
-      } catch (error) {
-        console.error('Failed to fetch contacts', error)
-        // setContacts([])
-      }
-    }
-
-    fetchContacts()
-  }, [])
-
-  const handleSelectContact = (contact) => {
-    setCurrentContact(contact)
-    setIsEditing(true)
-  }
-
-  const handleNewContact = () => {
-    setCurrentContact(createEmptyContact())
-    setIsEditing(false)
-  }
-
-  const handleSaveContact = async (contact) => {
-    if (isEditing && contact.id) {
-      const {data} = await updateContact(contact.id, contact)
-      setContacts((prev) => prev.map((item) => (item.id === contact.id ? data : item)))
-      setCurrentContact(data)
-    } else {
-      const {data} = await createContact(contact)
-      setContacts((prev) => [...prev, data])
-      setCurrentContact(createEmptyContact())
-      setIsEditing(false)
-    }
-  }
-
-  const handleDeleteContact = async (id) => {
-    await deleteContact(id)
-    setContacts((prev) => prev.filter((contact) => contact.id !== id))
-    setCurrentContact(createEmptyContact())
-    setIsEditing(false)
-  }
+    dispatch(fetchContacts())
+  }, [dispatch])
 
   return (
     <div className='app-container'>
@@ -71,17 +31,17 @@ const App = () => {
         <div className='main-container'>
           <ContactList 
             contacts={contacts}
-            onSelect={handleSelectContact}
-            onDelete={handleDeleteContact}
+            onSelect={(contact) => dispatch(selectContact(contact))}
+            onDelete={(id) => dispatch(removeContact(id))}
           />
 
           <div className='form'>
             <ContactForm
               contact={currentContact}
               isEditing={isEditing}
-              onSave={handleSaveContact}
-              onNew={handleNewContact}
-              onDelete={handleDeleteContact}
+              onSave={(contact) => dispatch(saveContact(contact, isEditing))}
+              onNew={() => dispatch(newContact())}
+              onDelete={(id) => dispatch(removeContact(id))}
             />
           </div>
         </div>
