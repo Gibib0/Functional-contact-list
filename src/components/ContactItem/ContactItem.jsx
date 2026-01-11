@@ -1,15 +1,20 @@
 import './ContactItem.css'
+import { useDispatch } from 'react-redux'
+import { selectContact, deleteContact as deleteContactAction } from '../../store/actions/contactActions'
+import { deleteContact as deleteContactApi } from '../../api/contact-service'
 
-const ContactItem = ({ contact, onSelect, onDelete }) => {
+const ContactItem = ({ contact }) => {
   const { firstName, lastName, id } = contact
+  const dispatch = useDispatch()
 
-  const handleDeleteClick = (e) => {
+  const handleDeleteClick = async (e) => {
     e.stopPropagation()
-    onDelete(id)
+    await deleteContactApi(id)
+    dispatch(deleteContactAction(id))
   }
 
   return (
-    <div className="contact-item" onDoubleClick={() => onSelect(contact)}>
+    <div className="contact-item" onDoubleClick={() => dispatch(selectContact(contact))}>
       <span className="contact-name">{firstName} {lastName}</span>
       <button className="contact-delete-btn" onClick={handleDeleteClick}>
         x

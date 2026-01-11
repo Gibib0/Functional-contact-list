@@ -1,25 +1,8 @@
-import { useEffect } from 'react'
-import {useDispatch, useSelector} from 'react-redux'
 import ContactList from './components/ContactList/ContactList'
 import ContactForm from './components/ContactForm/ContactForm'
-import {
-  fetchContacts,
-  selectContact,
-  newContact,
-  saveContact,
-  removeContact
-} from './store/actions/contactActions'
 import './App.css'
 
 const App = () => {
-  const dispatch = useDispatch()
-  const contacts = useSelector(state => state.list)
-  const currentContact = useSelector(state => state.currentContact)
-  const isEditing = useSelector(state => state.isEditing)
-
-  useEffect(() => {
-    dispatch(fetchContacts())
-  }, [dispatch])
 
   return (
     <div className='app-container'>
@@ -29,20 +12,10 @@ const App = () => {
 
       <main className='main'>
         <div className='main-container'>
-          <ContactList 
-            contacts={contacts}
-            onSelect={(contact) => dispatch(selectContact(contact))}
-            onDelete={(id) => dispatch(removeContact(id))}
-          />
+          <ContactList />
 
           <div className='form'>
-            <ContactForm
-              contact={currentContact}
-              isEditing={isEditing}
-              onSave={(contact) => dispatch(saveContact(contact, isEditing))}
-              onNew={() => dispatch(newContact())}
-              onDelete={(id) => dispatch(removeContact(id))}
-            />
+            <ContactForm />
           </div>
         </div>
       </main>

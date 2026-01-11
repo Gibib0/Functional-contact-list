@@ -1,22 +1,22 @@
 import { initialContact } from "../../model/initialContact";
 import {
-	SET_CONTACT,
+	SET_CONTACTS,
 	SELECT_CONTACT,
 	NEW_CONTACT,
 	ADD_CONTACT,
 	UPDATE_CONTACT,
 	DELETE_CONTACT,
-} from '../actions/contactActions';
+} from '../actionTypes';
 
 const initialState = {
 	list: [],
-	currentContact: initialContact,
+	currentContact: {...initialContact},
 	isEditing: false,
 }
 
 const contactReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case SET_CONTACT:
+		case SET_CONTACTS:
 			return {
 				...state,
 				list: action.payload,
@@ -30,14 +30,14 @@ const contactReducer = (state = initialState, action) => {
 		case NEW_CONTACT:
 			return {
 				...state,
-				currentContact: initialContact,
+				currentContact: {...initialContact},
 				isEditing: false,
 			}
 		case ADD_CONTACT:
 			return {
 				...state,
 				list: [...state.list, action.payload],
-				currentContact: initialContact,
+				currentContact: {...initialContact},
 				isEditing: false,
 			}
 		case UPDATE_CONTACT:
@@ -51,7 +51,7 @@ const contactReducer = (state = initialState, action) => {
 			return {
 				...state,
 				list: state.list.filter(contact => contact.id !== action.payload),
-				currentContact: initialContact,
+				currentContact: {...initialContact},
 				isEditing: false,
 			}
 		default: return state

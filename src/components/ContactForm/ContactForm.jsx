@@ -1,42 +1,56 @@
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import './ContactForm.css'
+import { createContact, updateContact as updateContactApi, deleteContact as deleteContactApi } from '../../api/contact-service'
+import { addContact, updateContact, newContact, deleteContact as deleteContactAction } from '../../store/actions/contactActions'
 
-const ContactForm = ({ contact, isEditing, onSave, onNew, onDelete }) => {
-	const [form, setForm] = useState(contact)
+const ContactForm = () => {
+  const dispatch = useDispatch()
+  const contact = useSelector(state => state.currentContact)
+  const isEditing = useSelector(state => state.isEditing)
 
-	useEffect(() => {
-    setForm(contact)
+  const [form, setForm] = useState(contact)
+
+  useEffect(() => {
+    setForm({...contact})
   }, [contact])
 
-	const onInputChange = (e) => {
-		const {name, value} = e.target
-		setForm(prev => ({
+  const onInputChange = (e) => {
+    const {name, value} = e.target
+    setForm(prev => ({
       ...prev,
       [name]: value
     }))
-	}
-
-	const onFormSubmit = (e) => {
-    e.preventDefault()
-    onSave(form)
   }
 
-	const handleClearField = (field) => {
+  const onFormSubmit = async (e) => {
+    e.preventDefault()
+    if (isEditing) {
+      const { data } = await updateContactApi(form.id, form)
+      dispatch(updateContact(data))
+    } else {
+      const { data } = await createContact(form)
+      dispatch(addContact(data))
+    }
+  }
+
+  const handleClearField = (field) => {
     setForm(prev => ({
       ...prev,
       [field]: ''
     }))
   }
 
-	const handleNew = () => {
-    onNew();
+  const handleNew = () => {
+    dispatch(newContact())
   }
 
-	const handleDeleteClick = () => {
-    onDelete(form.id);
+  const handleDeleteClick = async () => {
+    await deleteContactApi(form.id)
+    dispatch(deleteContactAction(form.id))
   }
 
-	return (
+  return (
     <form className="contact-form" onSubmit={onFormSubmit}>
       <div className="form-container">
         <div className="input-container">

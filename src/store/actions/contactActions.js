@@ -1,21 +1,15 @@
 import {
-	getAllContacts,
-	createContact,
-	updateContact,
-	deleteContact,
-} from '../../api/contact-service'
+	SET_CONTACTS,
+	SELECT_CONTACT,
+	NEW_CONTACT,
+	ADD_CONTACT,
+	UPDATE_CONTACT,
+	DELETE_CONTACT,
+} from '../actionTypes.js'
 
-export const SELECT_CONTACT = 'SELECT_CONTACT'
-export const NEW_CONTACT = 'NEW_CONTACT'
-export const SET_CONTACT = 'SET_CONTACT'
-
-export const ADD_CONTACT = 'ADD_CONTACT'
-export const UPDATE_CONTACT = 'UPDATE_CONTACT'
-export const DELETE_CONTACT = 'DELETE_CONTACT'
-
-export const setContact = (contact) => ({
-	type: SET_CONTACT,
-	payload: contact,
+export const setContacts = (contacts) => ({
+	type: SET_CONTACTS,
+	payload: contacts,
 })
 
 export const selectContact = (contact) => ({
@@ -23,36 +17,21 @@ export const selectContact = (contact) => ({
 	payload: contact,
 })
 
-export const newContact = (contact) => ({
+export const newContact = () => ({
 	type: NEW_CONTACT,
+})
+
+export const addContact = (contact) => ({
+	type: ADD_CONTACT,
 	payload: contact,
 })
 
-export const fetchContacts = () => async (dispatch) => {
-	const {data} = await getAllContacts()
-	dispatch(setContact(data || []))
-}
+export const updateContact = (contact) => ({
+	type: UPDATE_CONTACT,
+	payload: contact,
+})
 
-export const saveContact = (contact, isEditing) => async (dispatch) => {
-	if (isEditing) {
-		const {data} = await updateContact(contact.id, contact)
-		dispatch({
-			type: UPDATE_CONTACT,
-			payload: data
-		})
-	} else {
-		const {data} = await createContact(contact)
-		dispatch({
-			type: ADD_CONTACT,
-			payload: data
-		})
-	}
-}
-
-export const removeContact = (id) => async (dispatch) => {
-	await deleteContact(id)
-	dispatch({
-		type: DELETE_CONTACT,
-		payload: id
-	})
-}
+export const deleteContact = (id) => ({
+	type: DELETE_CONTACT,
+	payload: id,
+})
