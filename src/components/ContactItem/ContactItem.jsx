@@ -1,7 +1,9 @@
 import './ContactItem.css'
 import { useDispatch } from 'react-redux'
-import { selectContact, deleteContact as deleteContactAction } from '../../store/actions/contactActions'
-import { deleteContact as deleteContactApi } from '../../api/contact-service'
+import {
+  selectContact,
+  deleteContactRequest,
+} from '../../store/actions/contactActions'
 
 const ContactItem = ({ contact }) => {
   const { firstName, lastName, id } = contact
@@ -9,8 +11,7 @@ const ContactItem = ({ contact }) => {
 
   const handleDeleteClick = async (e) => {
     e.stopPropagation()
-    await deleteContactApi(id)
-    dispatch(deleteContactAction(id))
+    dispatch(deleteContactRequest(id))
   }
 
   return (

@@ -1,37 +1,50 @@
-import {
-	SET_CONTACTS,
-	SELECT_CONTACT,
-	NEW_CONTACT,
-	ADD_CONTACT,
-	UPDATE_CONTACT,
-	DELETE_CONTACT,
-} from '../actionTypes.js'
+import * as ACTION_TYPES from '../actionTypes.js'
 
-export const setContacts = (contacts) => ({
-	type: SET_CONTACTS,
+export const fetchContactsRequest = () => ({
+	type: ACTION_TYPES.FETCH_CONTACTS_REQUEST,
+})
+
+export const fetchContactsSuccess = (contacts) => ({
+	type: ACTION_TYPES.FETCH_CONTACTS_SUCCESS,
 	payload: contacts,
 })
 
-export const selectContact = (contact) => ({
-	type: SELECT_CONTACT,
+export const createContactRequest = (contact) => ({
+	type: ACTION_TYPES.CREATE_CONTACTS_REQUEST,
 	payload: contact,
 })
 
-export const newContact = () => ({
-	type: NEW_CONTACT,
-})
-
-export const addContact = (contact) => ({
-	type: ADD_CONTACT,
+export const createContactSuccess = (contact) => ({
+	type: ACTION_TYPES.CREATE_CONTACTS_SUCCESS,
 	payload: contact,
 })
 
-export const updateContact = (contact) => ({
-	type: UPDATE_CONTACT,
+export const updateContactRequest = (contact) => ({
+	type: ACTION_TYPES.UPDATE_CONTACTS_REQUEST,
 	payload: contact,
 })
 
-export const deleteContact = (id) => ({
-	type: DELETE_CONTACT,
+export const updateContactSuccess = (contact) => ({
+	type: ACTION_TYPES.UPDATE_CONTACTS_SUCCESS,
+	payload: contact,
+})
+
+export const deleteContactRequest = (id) => ({
+	type: ACTION_TYPES.DELETE_CONTACTS_REQUEST,
 	payload: id,
+})
+
+export const deleteContactSuccess = (id) => ({
+	type: ACTION_TYPES.DELETE_CONTACTS_SUCCESS,
+	payload: id,
+})
+
+export const selectContact = (contact) => ({
+	type: ACTION_TYPES.SELECT_CONTACT,
+	payload: contact,
+})
+
+export const newContact = (contact) => ({
+	type: ACTION_TYPES.NEW_CONTACT,
+	payload: contact,
 })

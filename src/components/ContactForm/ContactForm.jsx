@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import './ContactForm.css'
-import { createContact, updateContact as updateContactApi, deleteContact as deleteContactApi } from '../../api/contact-service'
-import { addContact, updateContact, newContact, deleteContact as deleteContactAction } from '../../store/actions/contactActions'
+import {
+  createContactRequest,
+  updateContactRequest,
+  deleteContactRequest,
+  newContact,
+} from '../../store/actions/contactActions'
 
 const ContactForm = () => {
   const dispatch = useDispatch()
@@ -23,14 +27,13 @@ const ContactForm = () => {
     }))
   }
 
-  const onFormSubmit = async (e) => {
+  const onFormSubmit = (e) => {
     e.preventDefault()
+
     if (isEditing) {
-      const { data } = await updateContactApi(form.id, form)
-      dispatch(updateContact(data))
+      dispatch(updateContactRequest(form))
     } else {
-      const { data } = await createContact(form)
-      dispatch(addContact(data))
+      dispatch(createContactRequest(form))
     }
   }
 
@@ -45,9 +48,8 @@ const ContactForm = () => {
     dispatch(newContact())
   }
 
-  const handleDeleteClick = async () => {
-    await deleteContactApi(form.id)
-    dispatch(deleteContactAction(form.id))
+  const handleDeleteClick = () => {
+    dispatch(deleteContactRequest(form.id))
   }
 
   return (
