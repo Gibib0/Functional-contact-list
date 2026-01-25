@@ -2,14 +2,14 @@ import { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ContactItem from '../ContactItem/ContactItem'
 import './ContactList.css'
-import { fetchContactsRequest } from '../../store/actions/contactActions'
+import { fetchContacts } from '../../store/slices/contactsSlice'
 
 const ContactList = () => {
   const dispatch = useDispatch()
-  const contacts = useSelector(state => state.list)
+  const contacts = useSelector(state => state.contacts.list)
 
   useEffect(() => {
-    dispatch(fetchContactsRequest())
+    dispatch(fetchContacts())
   }, [dispatch])
 
   return (

@@ -2,8 +2,8 @@ import './ContactItem.css'
 import { useDispatch } from 'react-redux'
 import {
   selectContact,
-  deleteContactRequest,
-} from '../../store/actions/contactActions'
+  deleteContact,
+} from '../../store/slices/contactsSlice'
 
 const ContactItem = ({ contact }) => {
   const { firstName, lastName, id } = contact
@@ -11,7 +11,7 @@ const ContactItem = ({ contact }) => {
 
   const handleDeleteClick = async (e) => {
     e.stopPropagation()
-    dispatch(deleteContactRequest(id))
+    dispatch(deleteContact(id))
   }
 
   return (

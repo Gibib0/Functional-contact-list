@@ -1,13 +1,10 @@
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import { configureStore } from '@reduxjs/toolkit'
+import contactsReducer from './slices/contactsSlice'
 
-import rootReducer from './reducers/contactReducer'
-import rootSaga from '../sagas/index'
-
-const sagaMiddleware = createSagaMiddleware()
-
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-
-sagaMiddleware.run(rootSaga)
+const store = configureStore({
+  reducer: {
+    contacts: contactsReducer,
+  },
+})
 
 export default store

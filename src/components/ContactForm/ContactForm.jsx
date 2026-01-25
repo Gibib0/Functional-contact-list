@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import './ContactForm.css'
 import {
-  createContactRequest,
-  updateContactRequest,
-  deleteContactRequest,
+  createContact,
+  updateContact,
+  deleteContact,
   newContact,
-} from '../../store/actions/contactActions'
+} from '../../store/slices/contactsSlice'
 
 const ContactForm = () => {
   const dispatch = useDispatch()
-  const contact = useSelector(state => state.currentContact)
-  const isEditing = useSelector(state => state.isEditing)
+  const contact = useSelector(state => state.contacts.currentContact)
+  const isEditing = useSelector(state => state.contacts.isEditing)
 
-  const [form, setForm] = useState(contact)
+  const [form, setForm] = useState({ ...contact })
 
   useEffect(() => {
     setForm({...contact})
@@ -31,9 +31,9 @@ const ContactForm = () => {
     e.preventDefault()
 
     if (isEditing) {
-      dispatch(updateContactRequest(form))
+      dispatch(updateContact(form))
     } else {
-      dispatch(createContactRequest(form))
+      dispatch(createContact(form))
     }
   }
 
@@ -49,7 +49,7 @@ const ContactForm = () => {
   }
 
   const handleDeleteClick = () => {
-    dispatch(deleteContactRequest(form.id))
+    dispatch(deleteContact(form.id))
   }
 
   return (
