@@ -9,9 +9,9 @@ import {
 
 export default function* rootSaga() {
 	yield all([
-		takeEvery(ACTION_TYPES.FETCH_CONTACTS_REQUEST, fetchContactsSaga),
-		takeEvery(ACTION_TYPES.CREATE_CONTACTS_REQUEST, createContactSaga),
-		takeEvery(ACTION_TYPES.UPDATE_CONTACTS_REQUEST, updateContactSaga),
-		takeEvery(ACTION_TYPES.DELETE_CONTACTS_REQUEST, deleteContactSaga),
+		takeEvery(ACTION_TYPES.FETCH_CONTACTS, fetchContactsSaga),
+		takeEvery(ACTION_TYPES.CREATE_CONTACT, createContactSaga),
+		takeEvery(ACTION_TYPES.UPDATE_CONTACT, updateContactSaga),
+		takeEvery(ACTION_TYPES.DELETE_CONTACT, deleteContactSaga),
 	])
 }

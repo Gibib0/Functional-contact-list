@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import './ContactForm.css'
 import {
-  createContactRequest,
-  updateContactRequest,
-  deleteContactRequest,
+  createContact,
+  updateContact,
+  deleteContact,
   newContact,
 } from '../../store/actions/contactActions'
 
@@ -12,8 +12,9 @@ const ContactForm = () => {
   const dispatch = useDispatch()
   const contact = useSelector(state => state.currentContact)
   const isEditing = useSelector(state => state.isEditing)
+  const loading = useSelector(state => state.loading)
 
-  const [form, setForm] = useState(contact)
+  const [form, setForm] = useState({...contact})
 
   useEffect(() => {
     setForm({...contact})
@@ -31,9 +32,9 @@ const ContactForm = () => {
     e.preventDefault()
 
     if (isEditing) {
-      dispatch(updateContactRequest(form))
+      dispatch(updateContact(form))
     } else {
-      dispatch(createContactRequest(form))
+      dispatch(createContact(form))
     }
   }
 
@@ -49,7 +50,7 @@ const ContactForm = () => {
   }
 
   const handleDeleteClick = () => {
-    dispatch(deleteContactRequest(form.id))
+    dispatch(deleteContact(form.id))
   }
 
   return (
@@ -63,6 +64,7 @@ const ContactForm = () => {
             onChange={onInputChange}
             placeholder="First Name"
             className="form-input"
+            disabled={loading}
           />
           {form.firstName && (
             <button
@@ -85,6 +87,7 @@ const ContactForm = () => {
             onChange={onInputChange}
             placeholder="Last Name"
             className="form-input"
+            disabled={loading}
           />
           {form.lastName && (
             <button
@@ -106,6 +109,7 @@ const ContactForm = () => {
             value={form.email}
             onChange={onInputChange}
             placeholder="Email"
+            disabled={loading}
             className="form-input"
           />
           {form.email && (
@@ -128,6 +132,7 @@ const ContactForm = () => {
             value={form.phone}
             onChange={onInputChange}
             placeholder="Phone"
+            disabled={loading}
             className="form-input"
           />
           {form.phone && (
@@ -147,12 +152,17 @@ const ContactForm = () => {
           type="button" 
           className="btn btn-new" 
           onClick={handleNew}
+          disabled={loading}
         >
           New
         </button>
 
-        <button type="submit" className="btn btn-save">
-          Save
+        <button 
+          type="submit" 
+          className="btn btn-save"
+          disabled={loading}
+        >
+          {loading ? 'Saving...' : 'Save'}
         </button>
 
         {isEditing && (
@@ -160,6 +170,7 @@ const ContactForm = () => {
             type="button" 
             className="btn btn-delete" 
             onClick={handleDeleteClick}
+            disabled={loading}
           >
             Delete
           </button>
