@@ -1,171 +1,112 @@
-import { useState, useEffect } from 'react'
+// import { useState, useEffect } from 'react'
+import {Formik} from 'formik'
+import {TextField, Button, Stack, Paper} from '@mui/material'
+import SaveIcon from '@mui/icons-material/Save'
+import DeleteIcon from '@mui/icons-material/Delete'
+import AddIcon from '@mui/icons-material/Add'
 import { useSelector, useDispatch } from 'react-redux'
-import './ContactForm.css'
 import {
   createContact,
   updateContact,
   deleteContact,
   newContact,
 } from '../../store/slices/contactsSlice'
+import { contactSchema } from '../../validation/contactSchema'
+import './ContactForm.css'
 
 const ContactForm = () => {
   const dispatch = useDispatch()
   const contact = useSelector(state => state.contacts.currentContact)
   const isEditing = useSelector(state => state.contacts.isEditing)
 
-  const [form, setForm] = useState({ ...contact })
-
-  useEffect(() => {
-    setForm({...contact})
-  }, [contact])
-
-  const onInputChange = (e) => {
-    const {name, value} = e.target
-    setForm(prev => ({
-      ...prev,
-      [name]: value
-    }))
-  }
-
-  const onFormSubmit = (e) => {
-    e.preventDefault()
-
+  const handleSubmit = (values) => {
     if (isEditing) {
-      dispatch(updateContact(form))
+      dispatch(updateContact(values))
     } else {
-      dispatch(createContact(form))
+      dispatch(createContact(values))
     }
   }
 
-  const handleClearField = (field) => {
-    setForm(prev => ({
-      ...prev,
-      [field]: ''
-    }))
-  }
-
-  const handleNew = () => {
-    dispatch(newContact())
-  }
-
-  const handleDeleteClick = () => {
-    dispatch(deleteContact(form.id))
-  }
-
   return (
-    <form className="contact-form" onSubmit={onFormSubmit}>
-      <div className="form-container">
-        <div className="input-container">
-          <input
-            type="text"
-            name="firstName"
-            value={form.firstName}
-            onChange={onInputChange}
-            placeholder="First Name"
-            className="form-input"
-          />
-          {form.firstName && (
-            <button
-              type="button"
-              className="clear-field-btn"
-              onClick={() => handleClearField('firstName')}
-            >
-              x
-            </button>
-          )}
-        </div>
-      </div>
+    <Paper elevation={3} sx={{p: 3}}>
+      <Formik
+        initialValues={contact}
+        enableReinitialize
+        validationSchema={contactSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid, resetForm }) => (
+          <form onSubmit={handleSubmit}>
+            <Stack spacing={2}>
+              <TextField
+                name='firstName'
+                label='First Name'
+                value={values.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.firstName && Boolean(errors.firstName)}
+                helperText={touched.firstName && errors.firstName}
+                fullWidth
+              />
 
-      <div className="form-container">
-        <div className="input-container">
-          <input
-            type="text"
-            name="lastName"
-            value={form.lastName}
-            onChange={onInputChange}
-            placeholder="Last Name"
-            className="form-input"
-          />
-          {form.lastName && (
-            <button
-              type="button"
-              className="clear-field-btn"
-              onClick={() => handleClearField('lastName')}
-            >
-              x
-            </button>
-          )}
-        </div>
-      </div>
+              <TextField
+                name="lastName"
+                label="Last Name"
+                value={values.lastName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.lastName && Boolean(errors.lastName)}
+                helperText={touched.lastName && errors.lastName}
+                fullWidth
+              />
 
-      <div className="form-container">
-        <div className="input-container">
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={onInputChange}
-            placeholder="Email"
-            className="form-input"
-          />
-          {form.email && (
-            <button
-              type="button"
-              className="clear-field-btn"
-              onClick={() => handleClearField('email')}
-            >
-              x
-            </button>
-          )}
-        </div>
-      </div>
+              <TextField
+                name="email"
+                label="Email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
+                fullWidth
+              />
 
-      <div className="form-container">
-        <div className="input-container">
-          <input
-            type="tel"
-            name="phone"
-            value={form.phone}
-            onChange={onInputChange}
-            placeholder="Phone"
-            className="form-input"
-          />
-          {form.phone && (
-            <button
-              type="button"
-              className="clear-field-btn"
-              onClick={() => handleClearField('phone')}
-            >
-              x
-            </button>
-          )}
-        </div>
-      </div>
+              <TextField
+                name="phone"
+                label="Phone"
+                value={values.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.phone && Boolean(errors.phone)}
+                helperText={touched.phone && errors.phone}
+                fullWidth
+              />
 
-      <div className="form-buttons">
-        <button 
-          type="button" 
-          className="btn btn-new" 
-          onClick={handleNew}
-        >
-          New
-        </button>
+              <Stack direction='row' spacing={2}>
+                <Button variant='outlined' onClick={() => {
+                    dispatch(newContact())
+                    resetForm()
+                  }}
+                  startIcon={<AddIcon />}
+                >
+                  New
+                </Button>
 
-        <button type="submit" className="btn btn-save">
-          Save
-        </button>
+                <Button type='submit' variant='contained' disabled={!isValid} startIcon={<SaveIcon />}>
+                  Save
+                </Button>
 
-        {isEditing && (
-          <button 
-            type="button" 
-            className="btn btn-delete" 
-            onClick={handleDeleteClick}
-          >
-            Delete
-          </button>
+                {isEditing && (
+                  <Button variant='contained' color='error' onClick={() => dispatch(deleteContact(values.id))} startIcon={<DeleteIcon />}>
+                    Delete
+                  </Button>
+                )}
+              </Stack>
+            </Stack>
+          </form>
         )}
-      </div>
-    </form>
+      </Formik>
+    </Paper>
   )
 }
 
