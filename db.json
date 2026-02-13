@@ -1,18 +1,11 @@
 {
   "contacts": [
     {
-      "id": "5d56",
-      "firstName": "Anastasiaa1",
-      "lastName": "Antonova",
-      "email": "anast111antonova@gmail.com",
-      "phone": "+38 (095) 901-96-93"
-    },
-    {
-      "id": "c87b",
-      "firstName": "test1",
-      "lastName": "contact",
-      "email": "anast111antonova@gmail.com",
-      "phone": "123"
+      "id": "5cd8",
+      "firstName": "Анастасія",
+      "lastName": "Антонова",
+      "email": "anast365antonova@gmail.com",
+      "phone": "0959019693"
     }
   ]
 }

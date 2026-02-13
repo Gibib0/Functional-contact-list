@@ -1,5 +1,4 @@
-// import { useState, useEffect } from 'react'
-import {Formik} from 'formik'
+import {Formik, Form, useField} from 'formik'
 import {TextField, Button, Stack, Paper} from '@mui/material'
 import SaveIcon from '@mui/icons-material/Save'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -26,6 +25,19 @@ const ContactForm = () => {
       dispatch(createContact(values))
     }
   }
+  
+  const TextField = ({ label, ...props }) => {
+    const [field, meta] = useField(props)
+    return (
+      <TextField
+        {...field}
+        label={label}
+        fullWidth
+        error={meta.touched && Boolean(meta.error)}
+        helperText={meta.touched && meta.error}
+      />
+    )
+  }
 
   return (
     <Paper elevation={3} sx={{p: 3}}>
@@ -35,55 +47,18 @@ const ContactForm = () => {
         validationSchema={contactSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid, resetForm }) => (
-          <form onSubmit={handleSubmit}>
+        {({ isValid, resetForm, values }) => (
+          <Form>
             <Stack spacing={2}>
-              <TextField
-                name='firstName'
-                label='First Name'
-                value={values.firstName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.firstName && Boolean(errors.firstName)}
-                helperText={touched.firstName && errors.firstName}
-                fullWidth
-              />
+              <FormikTextField name="firstName" label="First Name" />
+              <FormikTextField name="lastName" label="Last Name" />
+              <FormikTextField name="email" label="Email" />
+              <FormikTextField name="phone" label="Phone" />
 
-              <TextField
-                name="lastName"
-                label="Last Name"
-                value={values.lastName}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.lastName && Boolean(errors.lastName)}
-                helperText={touched.lastName && errors.lastName}
-                fullWidth
-              />
-
-              <TextField
-                name="email"
-                label="Email"
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
-                fullWidth
-              />
-
-              <TextField
-                name="phone"
-                label="Phone"
-                value={values.phone}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.phone && Boolean(errors.phone)}
-                helperText={touched.phone && errors.phone}
-                fullWidth
-              />
-
-              <Stack direction='row' spacing={2}>
-                <Button variant='outlined' onClick={() => {
+              <Stack direction="row" spacing={2}>
+                <Button
+                  variant="outlined"
+                  onClick={() => {
                     dispatch(newContact())
                     resetForm()
                   }}
@@ -97,13 +72,18 @@ const ContactForm = () => {
                 </Button>
 
                 {isEditing && (
-                  <Button variant='contained' color='error' onClick={() => dispatch(deleteContact(values.id))} startIcon={<DeleteIcon />}>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    onClick={() => dispatch(deleteContact(values.id))}
+                    startIcon={<DeleteIcon />}
+                  >
                     Delete
                   </Button>
                 )}
               </Stack>
             </Stack>
-          </form>
+          </Form>
         )}
       </Formik>
     </Paper>
