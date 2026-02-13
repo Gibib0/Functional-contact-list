@@ -26,7 +26,7 @@ const ContactForm = () => {
     }
   }
   
-  const TextField = ({ label, ...props }) => {
+  const FormikTextField = ({ label, ...props }) => {
     const [field, meta] = useField(props)
     return (
       <TextField
